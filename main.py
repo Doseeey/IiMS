@@ -1,11 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-from matplotlib.animation import FuncAnimation
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
+from animate_regression import animate_regression
 
-from data.get_data import get_data_energy
+from get_data import get_data_energy, get_data_turbine
 
 # Dummy z GPT
 def compute_cost(X, y, theta):
@@ -42,7 +41,7 @@ def gradient_descent_with_snapshots(X, y, theta, learning_rate, n_iterations, sn
 
     return theta, theta_snapshots, cost_history
 
-X, y = get_data_energy()
+X, y = get_data_turbine()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
@@ -67,32 +66,7 @@ y_pred = X.dot(theta_final)
 print(f"MSE: {mean_squared_error(y, y_pred):.2f}")
 print(f"R² score: {r2_score(y, y_pred):.2f}")
 
-# Zmienna po ktorej sprawdzamy regresje
-feature_index = 2
-
-x_vals = np.linspace(X[:, feature_index].min(), X[:, feature_index].max(), 100).reshape(-1, 1)
-
-X_vis = np.zeros((100, X.shape[1]))
-X_vis[:, 0] = 1  # bias
-X_vis[:, feature_index] = x_vals[:, 0]  # tylko ta jedna cecha się zmienia
-
-fig, ax = plt.subplots()
-ax.scatter(X[:, feature_index], y, color='blue', alpha=0.4, label='Data')
-line, = ax.plot([], [], color='red')
-ax.set_xlabel('Surface Area (scaled)')
-ax.set_ylabel('Cooling Load')
-ax.set_title('Gradient Descent – wpływ jednej cechy')
-ax.legend()
-
-def update(frame):
-    theta = theta_snapshots[frame]
-    y_vals = X_vis @ theta
-    line.set_data(x_vals[:, 0], y_vals)
-    ax.set_title(f'Iteracja: {frame * 100}')
-    return line,
-
-anim = FuncAnimation(fig, update, frames=len(theta_snapshots), interval=300, blit=True)
-plt.show()
+animate_regression(X, y, theta_snapshots, 1)
 
 
 

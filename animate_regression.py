@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt 
 from matplotlib.animation import FuncAnimation
+import matplotlib.animation as animation
 
 #theta_snapshots - iterations of regression to animate
 #feature_index - zmienna po ktorej animujemy
@@ -15,9 +16,9 @@ def animate_regression(X, y, theta_snapshots, feature_index):
     fig, ax = plt.subplots()
     ax.scatter(X[:, feature_index], y, color='blue', alpha=0.4, label='Data')
     line, = ax.plot([], [], color='red')
-    ax.set_xlabel('Surface Area (scaled)')
-    ax.set_ylabel('Cooling Load')
-    ax.set_title('Gradient Descent – wpływ jednej cechy')
+    # ax.set_xlabel('Surface Area (scaled)')
+    # ax.set_ylabel('Cooling Load')
+    # ax.set_title('Gradient Descent wpływ jednej cechy')
     ax.legend()
 
     def update(frame):
@@ -28,4 +29,9 @@ def animate_regression(X, y, theta_snapshots, feature_index):
         return line,
 
     anim = FuncAnimation(fig, update, frames=len(theta_snapshots), interval=300, blit=True)
+
+    # To save as gif
+    # wr = animation.PillowWriter(fps=15, bitrate=1800)
+    # anim.save('animation.gif', writer=wr)
+
     plt.show()

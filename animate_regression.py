@@ -6,7 +6,7 @@ import matplotlib.animation as animation
 #theta_snapshots - iterations of regression to animate
 #feature_index - zmienna po ktorej animujemy
 #ogolem pewnie bedzie trzeba to zmienic, ale cyborg wyplul cos tam dostosowalem, ogarniemy jak beda juz algosy
-def animate_regression(X, y, theta_snapshots, feature_index): 
+def animate_regression(X, y, theta_snapshots, feature_index, title): 
     x_vals = np.linspace(X[:, feature_index].min(), X[:, feature_index].max(), 100).reshape(-1, 1)
 
     X_vis = np.zeros((100, X.shape[1]))
@@ -31,7 +31,7 @@ def animate_regression(X, y, theta_snapshots, feature_index):
     anim = FuncAnimation(fig, update, frames=len(theta_snapshots), interval=300, blit=True)
 
     # To save as gif
-    # wr = animation.PillowWriter(fps=15, bitrate=1800)
-    # anim.save('animation.gif', writer=wr)
+    wr = animation.PillowWriter(fps=15, bitrate=1800)
+    anim.save(f'animation_{title}.gif', writer=wr)
 
     plt.show()

@@ -72,7 +72,8 @@ def newton_method(x, y, n_iterations):
 
     return thetas, cost_history
 
-X, y = get_data_turbine()
+X, y = get_data_turbine() # SISO
+# X, y = get_data_energy() # MISO 6 inputs 2 outputs
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -83,7 +84,8 @@ thetas_gd, cost_history_gd = gradient_descent(X_train, y_train, learning_rate, i
 thetas_gdm, cost_history_gdm = gradient_descent_with_momentum(X_train, y_train, learning_rate, iterations, beta)
 thetas_newton, cost_history_newton = newton_method(X_train, y_train, iterations)
 
-def present(x, y, iters, cost_history, thetas, title, plot=True):
+#anim_feature is to decide which feature should be used to display animation on, for miso 
+def present(x, y, iters, cost_history, thetas, title, anim_feature=1, plot=True):
     if plot:
         plt.plot(range(iters), cost_history)
         plt.xlabel("Liczba iteracji")
@@ -99,7 +101,7 @@ def present(x, y, iters, cost_history, thetas, title, plot=True):
     print(f"\nMSE {title}: {mean_squared_error(y, y_pred):.2f}")
     print(f"R² score {title}: {r2_score(y, y_pred):.2f}")
 
-    animate_regression(x, y, theta_snapshots, 1, title.lower().replace(" ", "_"))
+    animate_regression(x, y, theta_snapshots, anim_feature, title.lower().replace(" ", "_"))
 
 print("\n\n")
 present(X_test, y_test, iterations, cost_history_gd, thetas_gd, "Gradient Descent")
